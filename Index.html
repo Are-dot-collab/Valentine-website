@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? ❤️</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #5a3d5c;
+            overflow: hidden;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(172, 67, 110, 0.4);
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #e84393;
+            margin-bottom: 15px;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        .valentine-button {
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 20px 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+            font-family: 'Poppins', sans-serif;
+        }
+        #yesBtn {
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+        }
+        #noBtn {
+            background: linear-gradient(to right, #F44336, #FF9800);
+            position: relative;
+            transition: all 0.1s ease;
+        }
+        .message-container {
+            margin-top: 40px;
+            padding: 40px;
+            background: linear-gradient(to right, #f8f4ff, #fff4f8);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: none;
+        }
+        .message-container.show { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .valentine-button { font-size: 1.3rem; padding: 18px 40px; min-width: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will You Be My Valentine? <i class="fas fa-heart"></i></h1>
+        <p class="intro-text">My dearest, I have a very important question to ask you today!</p>
+        
+        <div class="question-container">
+            <div class="question-text" id="questionText">Will you be my Valentine?</div>
+            <div class="buttons-container">
+                <button class="valentine-button" id="yesBtn">YES! <i class="fas fa-heart"></i></button>
+                <button class="valentine-button" id="noBtn">No</button>
+            </div>
+            <div class="click-count" id="clickCount">No button escapes: 0</div>
+        </div>
+        
+        <div class="message-container" id="messageContainer">
+            <h2 class="message-title">Thank You! <i class="fas fa-heart"></i></h2>
+            <p class="message-content">You've made me the happiest person in the world!</p>
+            <div class="emoji-container">🤗 ❤️ 🎁 🧸 🍫 🌹 💝</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const messageContainer = document.getElementById('messageContainer');
+            const clickCountElement = document.getElementById('clickCount');
+            
+            let escapeCount = 0;
+            let isNoButtonActive = true;
+            
+            // Move No button when hovered
+            noBtn.addEventListener('mouseover', function() {
+                if (!isNoButtonActive) return;
+                moveNoButton();
+            });
+            
+            noBtn.addEventListener('touchstart', function(e) {
+                if (!isNoButtonActive) return;
+                e.preventDefault();
+                moveNoButton();
+            });
+            
+            function moveNoButton() {
+                const container = document.querySelector('.container');
+                const maxX = container.offsetWidth - noBtn.offsetWidth - 40;
+                const maxY = container.offsetHeight - noBtn.offsetHeight - 40;
+                
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
+                
+                escapeCount++;
+                clickCountElement.textContent = `No button escapes: ${escapeCount}`;
+                
+                if (escapeCount >= 5) {
+                    noBtn.innerHTML = 'YES! <i class="fas fa-heart"></i>';
+                    noBtn.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A)';
+                    isNoButtonActive = false;
+                    document.getElementById('questionText').innerHTML = 'See? Both say YES!';
+                    noBtn.onclick = showThankYouMessage;
+                }
+            }
+            
+            yesBtn.addEventListener('click', showThankYouMessage);
+            
+            function showThankYouMessage() {
+                messageContainer.classList.add('show');
+                document.querySelector('.question-container').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
